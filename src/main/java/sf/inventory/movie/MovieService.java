@@ -4,8 +4,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import sf.inventory.barcode.BarcodeService;
 
+import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -28,7 +28,7 @@ public class MovieService {
             year = Integer.parseInt(m.group(1));
         } catch (IllegalStateException e) {
             year = -1;
-            logger.error(String.format("No year found in item: {}", item));
+            logger.error(String.format("No year found in item: %s", item));
         }
 
         Movie movie = new Movie.MovieBuilder(item, year)
@@ -37,12 +37,31 @@ public class MovieService {
                 .setDvd(item.toLowerCase().contains("dvd"))
                 .build();
         movieRepository.save(movie);
-
-
-        System.out.println(movieRepository.findAll());
+        logger.info(String.format("Item saved to database: %s", movie));
     }
 
+
     public String getMovieCSV() {
-        return "";
+        ArrayList<Movie> movieArr = getAllMovies();
+        StringBuilder csv = new StringBuilder();
+        for (Movie m: movieArr) {
+            csv.append(String.format("%s,%s,%s,%s,%s,\n",
+                    m.getTitle().replaceAll(",", "\\,"),
+                    m.getReleaseYear(),
+                    m.getUhd(),
+                    m.getBluray(),
+                    m.getDvd())
+            );
+        }
+        return csv.toString();
+    }
+
+
+    private ArrayList<Movie> getAllMovies() {
+        ArrayList<Movie> movieArr = new ArrayList<>();
+        for (Movie m : movieRepository.findAll()) {
+            movieArr.add(m);
+        }
+        return movieArr;
     }
 }

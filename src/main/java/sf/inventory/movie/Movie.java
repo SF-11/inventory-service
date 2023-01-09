@@ -22,7 +22,7 @@ public class Movie {
 
     private String title;
 
-    private int release_year;
+    private int releaseYear;
 
     private boolean uhd;
 
@@ -35,7 +35,7 @@ public class Movie {
 
     public Movie(String title, int year, boolean uhd, boolean bluray, boolean dvd) {
         this.title = title;
-        this.release_year = year;
+        this.releaseYear = year;
         this.uhd = uhd;
         this.bluray = bluray;
         this.dvd = dvd;
@@ -43,7 +43,7 @@ public class Movie {
 
     private Movie(MovieBuilder builder) {
         this.title = builder.title;
-        this.release_year = builder.year;
+        this.releaseYear = builder.year;
         this.uhd = builder.uhd;
         this.bluray = builder.bluray;
         this.dvd = builder.dvd;
@@ -89,15 +89,15 @@ public class Movie {
         this.title = title;
     }
 
-    public int getRelease_year() {
-        return release_year;
+    public int getReleaseYear() {
+        return releaseYear;
     }
 
-    public void setRelease_year(int release_year) {
-        this.release_year = release_year;
+    public void setReleaseYear(int releaseYear) {
+        this.releaseYear = releaseYear;
     }
 
-    public boolean isUhd() {
+    public boolean getUhd() {
         return uhd;
     }
 
@@ -105,7 +105,7 @@ public class Movie {
         this.uhd = uhd;
     }
 
-    public boolean isBluray() {
+    public boolean getBluray() {
         return bluray;
     }
 
@@ -113,7 +113,7 @@ public class Movie {
         this.bluray = bluray;
     }
 
-    public boolean isDvd() {
+    public boolean getDvd() {
         return dvd;
     }
 
@@ -125,7 +125,7 @@ public class Movie {
     public String toString() {
         return "Movie{" +
                 "title='" + title + '\'' +
-                ", year=" + release_year +
+                ", year=" + releaseYear +
                 ", uhd=" + uhd +
                 ", bluray=" + bluray +
                 ", dvd=" + dvd +
