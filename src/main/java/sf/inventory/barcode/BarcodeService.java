@@ -7,12 +7,18 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import sf.inventory.external.BarcodeAPI;
+import sf.inventory.movie.Movie;
+import sf.inventory.movie.MovieRepository;
+import sf.inventory.movie.MovieService;
 
 @Service
 public class BarcodeService {
 
     @Autowired
     private BarcodeAPI barcodeAPI;
+
+    @Autowired
+    private MovieService movieService;
 
     @Autowired
     private static Logger logger = LoggerFactory.getLogger(BarcodeService.class);
@@ -28,13 +34,13 @@ public class BarcodeService {
         // lookup barcode
         String item = barcodeAPI.lookupBarcode(barcode);
 
-
-        // post result to sheets
-        // sheetsAPI.postValues();
+        movieService.processItem(item);
 
         // return response
         return ResponseEntity.ok(item);
     }
+
+
 
 
 
