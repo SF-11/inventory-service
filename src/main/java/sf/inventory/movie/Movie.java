@@ -1,9 +1,6 @@
 package sf.inventory.movie;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 public class Movie {
@@ -20,6 +17,7 @@ public class Movie {
         this.id = id;
     }
 
+    @Column(unique = true)
     private String title;
 
     private int releaseYear;

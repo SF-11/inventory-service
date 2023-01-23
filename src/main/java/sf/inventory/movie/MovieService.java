@@ -1,13 +1,17 @@
 package sf.inventory.movie;
 
+import org.hibernate.exception.ConstraintViolationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
 
 @Service
 public class MovieService {
@@ -36,8 +40,13 @@ public class MovieService {
                 .setBluray(item.toLowerCase().contains("blu"))
                 .setDvd(item.toLowerCase().contains("dvd"))
                 .build();
-        movieRepository.save(movie);
-        logger.info(String.format("Item saved to database: %s", movie));
+
+        try {
+            movieRepository.save(movie);
+            logger.info(String.format("Item saved to database: %s", movie));
+        } catch (DataIntegrityViolationException e) {
+            logger.error(e.getMessage());
+        }
     }
 
 

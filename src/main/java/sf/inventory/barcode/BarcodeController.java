@@ -14,6 +14,6 @@ public class BarcodeController {
 
     @PostMapping("/barcode")
     public ResponseEntity<String> postBarcode(@RequestBody String barcode) {
-       return barcodeService.postBarcode(barcode);
+       return barcodeService.postBarcode(barcode.strip());
     }
 }
