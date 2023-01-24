@@ -11,9 +11,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
+import sf.inventory.external.exception.BarcodeResponseException;
 
 import java.io.IOException;
-import java.util.Map;
 
 @Component
 public class BarcodeAPI {
@@ -30,14 +30,15 @@ public class BarcodeAPI {
      * @param barcode
      * @return
      */
-    public String lookupBarcode(String barcode) {
+    public String lookupBarcode(String barcode) throws BarcodeResponseException {
 
         Response response = apiSearch(barcode);
         if (response.code() == 200) {
             logger.info("Barcode lookup request succeeded");
         } else {
-            logger.info("Barcode lookup request failed with response code: " + response.code());
-            return "";
+            logger.error("Barcode lookup request failed with response code: " + response.code());
+            logger.error(response.headers().get("Retry-after"));
+            throw new BarcodeResponseException("Barcode lookup request failed", response.code());
         }
 
         String title = "";

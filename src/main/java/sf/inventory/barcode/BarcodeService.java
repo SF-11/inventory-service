@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import sf.inventory.external.BarcodeAPI;
+import sf.inventory.external.exception.BarcodeResponseException;
 import sf.inventory.movie.MovieService;
 
 @Service
@@ -30,7 +31,12 @@ public class BarcodeService {
         }
 
         // lookup barcode
-        String item = barcodeAPI.lookupBarcode(barcode);
+        String item = "";
+        try {
+            item = barcodeAPI.lookupBarcode(barcode);
+        } catch (BarcodeResponseException e) {
+            return ResponseEntity.status(e.getResponseCode()).body(e.getMessage());
+        }
         // TODO check if response is blank - pass on HTTP code from barcode API
 
         // save to movie repository
