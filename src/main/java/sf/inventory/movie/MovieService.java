@@ -1,13 +1,11 @@
 package sf.inventory.movie;
 
-import org.hibernate.exception.ConstraintViolationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -22,7 +20,7 @@ public class MovieService {
     @Autowired
     private static final Logger logger = LoggerFactory.getLogger(MovieService.class);
 
-    public void processItem(String item) {
+    public void processItem(String barcode, String item) {
         Pattern p = Pattern.compile(".*(\\d{4}).*");
 
         int year;
@@ -35,7 +33,7 @@ public class MovieService {
             logger.error(String.format("No year found in item: %s", item));
         }
 
-        Movie movie = new Movie.MovieBuilder(item, year)
+        Movie movie = new Movie.MovieBuilder(barcode, item, year)
                 .setUHD(item.toLowerCase().contains("udh") || item.toLowerCase().contains("4k"))
                 .setBluray(item.toLowerCase().contains("blu"))
                 .setDvd(item.toLowerCase().contains("dvd"))
@@ -49,6 +47,10 @@ public class MovieService {
         }
     }
 
+
+    public boolean recordExists(String barcode) {
+        return movieRepository.findByBarcode(barcode).size() > 0;
+    }
 
     public String getMovieCSV() {
         ArrayList<Movie> movieArr = getAllMovies();

@@ -26,8 +26,13 @@ public class BarcodeService {
     public ResponseEntity<String> postBarcode(String barcode) {
         // validate barcode
         if (!validateBarcode(barcode)) {
-            logger.info("Invalid barcode: " + barcode);
+            logger.error("Invalid barcode: " + barcode);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid barcode: " + barcode);
+        }
+        // don't lookup a barcode we already have
+        if (movieService.recordExists(barcode)) {
+            logger.error("Barcode already exists in database: " + barcode);
+            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body("Barcode already exists in database: " + barcode);
         }
 
         // lookup barcode
@@ -40,7 +45,7 @@ public class BarcodeService {
         // TODO check if response is blank - pass on HTTP code from barcode API
 
         // save to movie repository
-        movieService.processItem(item);
+        movieService.processItem(barcode, item);
 
         // return response
         return ResponseEntity.ok(item);

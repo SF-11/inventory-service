@@ -18,6 +18,9 @@ public class Movie {
     }
 
     @Column(unique = true)
+    private String barcode;
+
+    @Column(unique = true)
     private String title;
 
     private int releaseYear;
@@ -31,7 +34,8 @@ public class Movie {
     public Movie() {
     }
 
-    public Movie(String title, int year, boolean uhd, boolean bluray, boolean dvd) {
+    public Movie(String barcode, String title, int year, boolean uhd, boolean bluray, boolean dvd) {
+        this.barcode = barcode;
         this.title = title;
         this.releaseYear = year;
         this.uhd = uhd;
@@ -40,6 +44,7 @@ public class Movie {
     }
 
     private Movie(MovieBuilder builder) {
+        this.barcode = builder.barcode;
         this.title = builder.title;
         this.releaseYear = builder.year;
         this.uhd = builder.uhd;
@@ -48,13 +53,15 @@ public class Movie {
     }
 
     public static class MovieBuilder {
+        private String barcode;
         private String title;
         private int year;
         private boolean uhd;
         private boolean bluray;
         private boolean dvd;
 
-        public MovieBuilder(String title, int year) {
+        public MovieBuilder(String barcode, String title, int year) {
+            this.barcode = barcode;
             this.title = title;
             this.year = year;
         }
@@ -77,6 +84,14 @@ public class Movie {
         public Movie build() {
             return new Movie(this);
         }
+    }
+
+    public String getBarcode() {
+        return barcode;
+    }
+
+    public void setBarcode(String barcode) {
+        this.barcode = barcode;
     }
 
     public String getTitle() {
@@ -122,7 +137,8 @@ public class Movie {
     @Override
     public String toString() {
         return "Movie{" +
-                "title='" + title + '\'' +
+                "barcode=" + barcode +
+                ", title='" + title + '\'' +
                 ", year=" + releaseYear +
                 ", uhd=" + uhd +
                 ", bluray=" + bluray +
